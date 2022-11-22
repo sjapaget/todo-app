@@ -1,0 +1,19 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "OOP in JS practice project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjapaget/todo-app.git"
+  },
+  "author": "sjapaget",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sjapaget/todo-app/issues"
+  },
+  "homepage": "https://github.com/sjapaget/todo-app#readme"
+}
