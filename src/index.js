@@ -1,14 +1,24 @@
 import './style.css';
 import Displayer from './display.js';
+import Project from './project.js'
 import Task from './task.js';
+
 
 const root = document.getElementById('root');
 
-const taskOne = new Task({
-  title: "task one",
-  description: "This is a great description"
+const exampleTask = new Task({
+  title: 'Example Task',
+  description: 'This is an example task',
+  dueDate: new Date('26/12/2023'),
 })
 
-const taskArray = [taskOne];
+const defaultProject = new Project({
+  name: 'Your Tasks',
+})
 
-Displayer.renderTasks(taskArray, root);
+defaultProject.addTask(exampleTask);
+
+const allProjects = [defaultProject]
+
+const display = new Displayer(root, allProjects)
+display.renderUI(defaultProject);

@@ -12,10 +12,3 @@ export default class Project {
     this.tasks.push(task)
   }
 }
-
-const test = new Project({
-  name: "test one",
-})
-
-console.log(test)
-
