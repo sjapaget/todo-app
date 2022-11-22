@@ -1,3 +1,9 @@
 import './style.css';
+import Task from './task.js'
 
-alert("it works");
+const test = new Task({
+  title: "test",
+  description: "a test task"
+});
+
+
