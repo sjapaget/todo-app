@@ -1,9 +1,14 @@
 import './style.css';
-import Task from './task.js'
+import Displayer from './display.js';
+import Task from './task.js';
 
-const test = new Task({
-  title: "test",
-  description: "a test task"
-});
+const root = document.getElementById('root');
 
+const taskOne = new Task({
+  title: "task one",
+  description: "This is a great description"
+})
 
+const taskArray = [taskOne];
+
+Displayer.renderTasks(taskArray, root);
