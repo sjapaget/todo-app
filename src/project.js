@@ -5,17 +5,11 @@ export default class Project {
   }
 
   get taskList() {
-    return this.taskList
+    return this.tasks
   }
 
   addTask(task) {
+    // add a check to verify that the parameter passed is an instance of Task class
     this.tasks.push(task)
   }
 }
-
-const test = new Project({
-  name: "test one",
-})
-
-console.log(test)
-
