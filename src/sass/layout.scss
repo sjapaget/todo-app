@@ -1,0 +1,18 @@
+.main__container{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.main__buttons-container {
+  grid-column: span 2;
+  padding: .5rem;
+}
+
+.main__task-container {
+  margin: 1rem;
+}
+
+
+.main__projects-list {
+  margin: 1rem;
+}

@@ -1,0 +1,17 @@
+.main__projects-list {
+  padding: 1rem;
+  border-left: solid 1px rgba($color-text, 0.2);
+
+  li {
+    background-color: $color-bg-main;
+    border-radius: $border-radius;
+    cursor: pointer;
+    list-style: none;
+    padding: 1rem;
+    transition: $transition-speed;
+  }
+
+  li:hover {
+    background-color: $color-bg-main-highlight;
+  }
+}

@@ -23,15 +23,15 @@ export default class Displayer {
 
   #renderControls(DOMnode) {
 
-    const projectButtons = document.createElement('div');
-
+    const buttonsContainer = document.createElement('div');
+      buttonsContainer.classList.add('main__buttons-container');
     const addTaskButton = document.createElement('button');
       addTaskButton.innerText = "Add Task";
       addTaskButton.onclick = this.#renderNewTaskForm.bind(this);
 
-    projectButtons.appendChild(addTaskButton);
+    buttonsContainer.appendChild(addTaskButton);
 
-    DOMnode.appendChild(projectButtons);
+    DOMnode.appendChild(buttonsContainer);
   };
 
   #renderCurrentProject(currentProject, DOMnode) {
@@ -48,8 +48,9 @@ export default class Displayer {
   #renderProjectsList(DOMnode) {
 
     const section = document.createElement('div');
+      section.classList.add('main__projects-list')
     const sectionTitle = document.createElement('h1');
-    sectionTitle.innerText = 'Projects:'
+      sectionTitle.innerText = 'Projects:'
     section.appendChild(sectionTitle);
 
     const listContainer = document.createElement('ul');
@@ -69,6 +70,7 @@ export default class Displayer {
   #renderTasks(tasksArray, DOMnode = this.rootNode) {
 
     const taskList = document.createElement('ul');
+      taskList.classList.add('main__task-list')
 
     tasksArray.forEach(task => {
       const listItem = document.createElement('li');
@@ -82,6 +84,7 @@ export default class Displayer {
   #renderNewTaskForm() {
 
     const newTaskFormContainer = document.createElement('div');
+      newTaskFormContainer.classList.add('form__container')
 
     const form = document.createElement('form');
 
@@ -169,6 +172,7 @@ export default class Displayer {
       label.for = inputName;
       label.innerText = labelText;
     const group = document.createElement('div');
+      group.classList.add("form__input-group")
       group.appendChild(label);
       group.appendChild(input);
     return [group, input]
