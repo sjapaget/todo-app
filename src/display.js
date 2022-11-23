@@ -129,9 +129,12 @@ export default class Displayer {
           dueDate: dueDate,
           priority: taskPriorityInput.value
         }));
-        //re-render the task container
+
         const taskContainer = document.getElementsByClassName('main__task-container')[0]
         this.renderCurrentProject(this.currentProject, taskContainer);
+        
+        const formContainer = event.path[2];
+        formContainer.remove();
 
       }
     form.appendChild(submitButton);
