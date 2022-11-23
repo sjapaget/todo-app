@@ -1,3 +1,5 @@
+import Task from './task.js'
+
 export default class Displayer {
 
   constructor(rootNode, projects) {
@@ -10,11 +12,13 @@ export default class Displayer {
     const taskContainer = document.createElement('main');
     taskContainer.classList.add('main__task-container');
 
-    this.renderCurrentProject(this.currentProject, taskContainer);
-    this.renderControls(this.rootNode)
-    this.renderProjectsList(this.rootNode)
+    this.renderControls(this.rootNode);
 
-    this.rootNode.appendChild(taskContainer)
+    this.renderCurrentProject(this.currentProject, taskContainer);
+    this.rootNode.appendChild(taskContainer);
+
+    this.renderProjectsList(this.rootNode);
+
   }
 
   renderControls(DOMnode) {
@@ -30,7 +34,7 @@ export default class Displayer {
   }
 
   renderCurrentProject(currentProject, DOMnode) {
-
+    DOMnode.replaceChildren();
     const projectName = document.createElement('h1');
     projectName.innerText = currentProject.name;
     DOMnode.appendChild(projectName);
@@ -70,37 +74,93 @@ export default class Displayer {
   }
 
   renderNewTaskForm() {
+
     const newTaskFormContainer = document.createElement('div');
+          newTaskFormContainer.classList.add('bip');
     const form = document.createElement('form');
+
     const title = document.createElement('h2');
-    title.innerText = 'New Task';
+      title.innerText = 'New Task';
 
-    const taskTitleInput = document.createElement('input');
-    taskTitleInput.placeholder = 'Task Name';
-    form.appendChild(taskTitleInput);
+    const [taskTitleGroup, taskTitleInput] = this.#generateFormInput({
+      inputType: "text",
+      placeHolderText: "Feed the cat...",
+      inputName: "task-name",
+      labelText: 'Task Name'
+    });
 
-    const taskDescriptionInput = document.createElement('input');
-    taskDescriptionInput.placeholder = 'Description';
-    form.appendChild(taskDescriptionInput);
+    form.appendChild(taskTitleGroup);
 
-    const taskDueDateInput = document.createElement('input');
-    taskDueDateInput.type = 'date';
-    taskDueDateInput.placeholder = 'Due Date';
-    form.appendChild(taskDueDateInput);
+    const [taskDescriptionGroup, taskDescriptionInput] = this.#generateFormInput({
+      inputType: "text",
+      placeHolderText: "More details here.",
+      inputName: "task-description",
+      labelText: 'Description'
+    });
+    form.appendChild(taskDescriptionGroup);
+
+    const [taskDueDateGroup, taskDueDateInput] = this.#generateFormInput({
+      inputType: "date",
+      placeHolderText: "dd/mm/yyyy",
+      inputName: "task-dueDate",
+      labelText: 'Due Date'
+    });
+    form.appendChild(taskDueDateGroup);
+
+    const [taskPriorityGroup, taskPriorityInput] = this.#generateFormInput({
+      inputType: 'checkbox',
+      placeHolderText: "Priority task?",
+      inputName: "task-priority",
+      labelText: "Priority task?"
+    });
+    form.appendChild(taskPriorityGroup);
 
     const submitButton = document.createElement('button');
       submitButton.innerText = "Create Task";
-      submitButton.onclick = (event) => {
-        event.preventDefault();
-        const newTask = new Task({
 
-        })
-        this.currentProject.addTask(newTask);
+      submitButton.onclick = (event) => {
+
+        event.preventDefault();
+        const dueDate = new Date(taskDueDateInput.value);
+
+        this.currentProject.addTask(new Task({
+          title: taskTitleInput.value,
+          description: taskDescriptionInput.value,
+          dueDate: dueDate,
+          priority: taskPriorityInput.value
+        }));
+        //re-render the task container
+        const taskContainer = document.getElementsByClassName('main__task-container')[0]
+        this.renderCurrentProject(this.currentProject, taskContainer);
+
       }
     form.appendChild(submitButton);
+
     newTaskFormContainer.appendChild(title);
     newTaskFormContainer.appendChild(form);
 
     this.rootNode.appendChild(newTaskFormContainer);
+  }
+
+  #generateFormInput(properties) {
+    const {
+      inputType,
+      placeholderText,
+      inputName,
+      labelText,
+
+    } = properties;
+
+    const input = document.createElement('input');
+      input.type = inputType;
+      input.placeHolder = placeholderText;
+      input.name = inputName;
+    const label = document.createElement('label');
+      label.for = inputName;
+      label.innerText = labelText;
+    const group = document.createElement('div');
+      group.appendChild(label);
+      group.appendChild(input);
+    return [group, input]
   }
 }
