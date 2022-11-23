@@ -9,40 +9,43 @@ export default class Displayer {
   }
 
   renderUI() {
+
     const taskContainer = document.createElement('main');
     taskContainer.classList.add('main__task-container');
 
-    this.renderControls(this.rootNode);
+    this.#renderControls(this.rootNode);
 
-    this.renderCurrentProject(this.currentProject, taskContainer);
+    this.#renderCurrentProject(this.currentProject, taskContainer);
     this.rootNode.appendChild(taskContainer);
 
-    this.renderProjectsList(this.rootNode);
+    this.#renderProjectsList(this.rootNode);
+  };
 
-  }
+  #renderControls(DOMnode) {
 
-  renderControls(DOMnode) {
     const projectButtons = document.createElement('div');
 
     const addTaskButton = document.createElement('button');
       addTaskButton.innerText = "Add Task";
-      addTaskButton.onclick = this.renderNewTaskForm.bind(this);
+      addTaskButton.onclick = this.#renderNewTaskForm.bind(this);
 
     projectButtons.appendChild(addTaskButton);
 
     DOMnode.appendChild(projectButtons);
-  }
+  };
 
-  renderCurrentProject(currentProject, DOMnode) {
+  #renderCurrentProject(currentProject, DOMnode) {
+
     DOMnode.replaceChildren();
+
     const projectName = document.createElement('h1');
     projectName.innerText = currentProject.name;
     DOMnode.appendChild(projectName);
 
-    this.renderTasks(currentProject.tasks, DOMnode);
+    this.#renderTasks(currentProject.tasks, DOMnode);
   }
 
-  renderProjectsList(DOMnode) {
+  #renderProjectsList(DOMnode) {
 
     const section = document.createElement('div');
     const sectionTitle = document.createElement('h1');
@@ -52,31 +55,34 @@ export default class Displayer {
     const listContainer = document.createElement('ul');
 
     const projectsList = this.projects.map(project => project.name);
-    projectsList.map(projectName => {
+      projectsList.map(projectName => {
 
-      const listItem = document.createElement('li');
-      listItem.innerText = projectName
-      listContainer.appendChild(listItem)
-    })
+        const listItem = document.createElement('li');
+        listItem.innerText = projectName;
+        listContainer.appendChild(listItem);
+      });
 
-    section.appendChild(listContainer)
-    DOMnode.appendChild(section)
-  }
+    section.appendChild(listContainer);
+    DOMnode.appendChild(section);
+  };
 
-  renderTasks(tasksArray, DOMnode = this.rootNode) {
+  #renderTasks(tasksArray, DOMnode = this.rootNode) {
+
     const taskList = document.createElement('ul');
+
     tasksArray.forEach(task => {
       const listItem = document.createElement('li');
-      listItem.innerText = task.title
+      listItem.innerText = task.title;
       taskList.appendChild(listItem);
-    })
-    DOMnode.appendChild(taskList);
-  }
+    });
 
-  renderNewTaskForm() {
+    DOMnode.appendChild(taskList);
+  };
+
+  #renderNewTaskForm() {
 
     const newTaskFormContainer = document.createElement('div');
-          newTaskFormContainer.classList.add('bip');
+
     const form = document.createElement('form');
 
     const title = document.createElement('h2');
@@ -130,20 +136,21 @@ export default class Displayer {
           priority: taskPriorityInput.value
         }));
 
-        const taskContainer = document.getElementsByClassName('main__task-container')[0]
-        this.renderCurrentProject(this.currentProject, taskContainer);
-        
+        const taskContainer = document.getElementsByClassName('main__task-container')[0];
+
+        this.#renderCurrentProject(this.currentProject, taskContainer);
+
         const formContainer = event.path[2];
         formContainer.remove();
+      };
 
-      }
     form.appendChild(submitButton);
 
     newTaskFormContainer.appendChild(title);
     newTaskFormContainer.appendChild(form);
 
     this.rootNode.appendChild(newTaskFormContainer);
-  }
+  };
 
   #generateFormInput(properties) {
     const {
@@ -165,5 +172,5 @@ export default class Displayer {
       group.appendChild(label);
       group.appendChild(input);
     return [group, input]
-  }
+  };
 }
