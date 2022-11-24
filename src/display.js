@@ -1,35 +1,45 @@
+import Project from './project.js';
 import Task from './task.js'
 
 export default class Displayer {
 
   constructor(rootNode, projects) {
     this.rootNode = rootNode;
-    this.projects = projects
+    this.projects = projects;
     this.currentProject = projects[0];
   }
 
   renderUI() {
 
-    const taskContainer = document.createElement('main');
-    taskContainer.classList.add('main__task-container');
-
     this.#renderControls(this.rootNode);
 
+    const taskContainer = document.createElement('main');
+      taskContainer.classList.add('main__task-container');
     this.#renderCurrentProject(this.currentProject, taskContainer);
     this.rootNode.appendChild(taskContainer);
 
-    this.#renderProjectsList(this.rootNode);
+    const projectsContainer = document.createElement('aside');
+      projectsContainer.classList.add('main__projects-list');
+    this.rootNode.appendChild(projectsContainer);
+    this.#renderProjectsList(projectsContainer);
   };
 
   #renderControls(DOMnode) {
 
     const buttonsContainer = document.createElement('div');
       buttonsContainer.classList.add('main__buttons-container');
+
     const addTaskButton = document.createElement('button');
+      addTaskButton.classList.add('controls__button');
       addTaskButton.innerText = "Add Task";
       addTaskButton.onclick = this.#renderNewTaskForm.bind(this);
-
     buttonsContainer.appendChild(addTaskButton);
+
+    const addProjectButton = document.createElement('button');
+      addProjectButton.classList.add('controls__button');
+      addProjectButton.innerText = "New Project";
+      addProjectButton.onclick = this.#renderNewProjectForm.bind(this);
+    buttonsContainer.appendChild(addProjectButton);
 
     DOMnode.appendChild(buttonsContainer);
   };
@@ -47,24 +57,22 @@ export default class Displayer {
 
   #renderProjectsList(DOMnode) {
 
-    const section = document.createElement('div');
-      section.classList.add('main__projects-list')
-    const sectionTitle = document.createElement('h1');
-      sectionTitle.innerText = 'Projects:'
-    section.appendChild(sectionTitle);
+    DOMnode.replaceChildren();
 
     const listContainer = document.createElement('ul');
 
+    const sectionTitle = document.createElement('h1');
+      sectionTitle.innerText = 'Projects:'
+    listContainer.appendChild(sectionTitle);
+
     const projectsList = this.projects.map(project => project.name);
       projectsList.map(projectName => {
-
         const listItem = document.createElement('li');
         listItem.innerText = projectName;
         listContainer.appendChild(listItem);
       });
 
-    section.appendChild(listContainer);
-    DOMnode.appendChild(section);
+    DOMnode.appendChild(listContainer);
   };
 
   #renderTasks(tasksArray, DOMnode = this.rootNode) {
@@ -91,9 +99,12 @@ export default class Displayer {
     const title = document.createElement('h2');
       title.innerText = 'New Task';
 
+    newTaskFormContainer.appendChild(title);
+    newTaskFormContainer.appendChild(form);
+
     const [taskTitleGroup, taskTitleInput] = this.#generateFormInput({
       inputType: "text",
-      placeHolderText: "Feed the cat...",
+      placeholderText: "Feed the cat...",
       inputName: "task-name",
       labelText: 'Task Name'
     });
@@ -102,7 +113,7 @@ export default class Displayer {
 
     const [taskDescriptionGroup, taskDescriptionInput] = this.#generateFormInput({
       inputType: "text",
-      placeHolderText: "More details here.",
+      placeholderText: "More details here.",
       inputName: "task-description",
       labelText: 'Description'
     });
@@ -110,7 +121,7 @@ export default class Displayer {
 
     const [taskDueDateGroup, taskDueDateInput] = this.#generateFormInput({
       inputType: "date",
-      placeHolderText: "dd/mm/yyyy",
+      placeholderText: "dd/mm/yyyy",
       inputName: "task-dueDate",
       labelText: 'Due Date'
     });
@@ -118,7 +129,7 @@ export default class Displayer {
 
     const [taskPriorityGroup, taskPriorityInput] = this.#generateFormInput({
       inputType: 'checkbox',
-      placeHolderText: "Priority task?",
+      placeholderText: "Priority task?",
       inputName: "task-priority",
       labelText: "Priority task?"
     });
@@ -149,11 +160,61 @@ export default class Displayer {
 
     form.appendChild(submitButton);
 
-    newTaskFormContainer.appendChild(title);
-    newTaskFormContainer.appendChild(form);
-
     this.rootNode.appendChild(newTaskFormContainer);
   };
+
+  #renderNewProjectForm() {
+
+    const newProjectFormContainer = this.#generateForm('New Project');
+    const form = newProjectFormContainer.firstChild;
+
+    const [projectTitleGroup, projectTitleInput] = this.#generateFormInput({
+      inputType: "text",
+      placeholderText: "Project title",
+      inputName: "project-name",
+      labelText: "Title"
+    });
+    form.appendChild(projectTitleGroup);
+
+    const submitButton = document.createElement('button');
+      submitButton.innerText = "Create Project";
+
+      submitButton.onclick = (event) => {
+        event.preventDefault();
+
+        const newProject = new Project({
+          name: projectTitleInput.value
+        });
+
+        this.projects.push(newProject);
+
+        const projectListContainer = document.querySelector('.main__projects-list');
+
+        this.#renderProjectsList(projectListContainer);
+
+        const formContainer = document.querySelector('.form__container');
+        formContainer.remove();
+      };
+
+    form.appendChild(submitButton);
+
+    this.rootNode.appendChild(newProjectFormContainer);
+  };
+
+  #generateForm(formTitle) {
+    const formContainer = document.createElement('div');
+      formContainer.classList.add('form__container');
+
+    const form = document.createElement('form');
+
+    const title = document.createElement('h2');
+      form.innerText = formTitle;
+
+      formContainer.appendChild(form);
+      formContainer.appendChild(title);
+
+    return formContainer;
+  }
 
   #generateFormInput(properties) {
     const {
@@ -166,7 +227,7 @@ export default class Displayer {
 
     const input = document.createElement('input');
       input.type = inputType;
-      input.placeHolder = placeholderText;
+      input.placeholder = placeholderText;
       input.name = inputName;
     const label = document.createElement('label');
       label.for = inputName;
