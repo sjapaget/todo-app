@@ -1,0 +1,17 @@
+.main__task-list {
+  padding: 1rem;
+
+  li {
+    background-color: $color-bg-alt;
+    border-radius: $border-radius;
+    cursor: pointer;
+    list-style: none;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: $transition-speed;
+  }
+
+  li:hover {
+    background-color: $color-bg-alt-highlight;
+  }
+}

@@ -1,0 +1,29 @@
+.form__container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: $color-bg-alt-highlight;
+  padding: 1rem;
+
+  .form__input-group {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem;
+    width: 20vw;
+
+    input {
+      border-radius: $border-radius;
+      padding: .3rem;
+    }
+  }
+
+  button {
+    background-color: $color-bg-main;
+    border: 1px solid;
+    border-radius: $border-radius;
+    font-size: 1.5rem;
+    padding: .5rem;
+    cursor: pointer;
+  }
+}

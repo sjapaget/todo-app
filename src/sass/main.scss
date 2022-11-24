@@ -1,0 +1,34 @@
+/* External Resources */
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+/* Global Variables */
+$border-radius: 15px;
+
+$color-bg: #EED7D215;
+$color-bg-main: #A6F4DC60;
+$color-bg-main-highlight: #A6F4DC;
+$color-bg-alt: #85FF9E75;
+$color-bg-alt-highlight: #85FF9E;
+
+$color-text: #212738;
+
+$transition-speed: 250ms;
+
+/* Global Style Defaults */
+body, button, input {
+  color: $color-text;
+  background-color: $color-bg;
+  font-family: 'Patrick Hand', cursive;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+/* Stylesheets */
+@import './control-panel.scss';
+@import './form.scss';
+@import './layout.scss';
+@import './project-list.scss';
+@import './task-list.scss';
