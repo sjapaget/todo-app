@@ -149,6 +149,16 @@ export default class Displayer {
 
     form.appendChild(submitButton);
 
+    const cancelBtn = document.createElement('button');
+      cancelBtn.classList.add('form__cancel-btn');
+      cancelBtn.innerText = 'Cancel';
+      cancelBtn.onclick = (event) => {
+        event.preventDefault();
+        const formContainer = event.path[2];
+        formContainer.remove();
+      }
+    form.appendChild(cancelBtn);
+
     newTaskFormContainer.appendChild(title);
     newTaskFormContainer.appendChild(form);
 
@@ -168,6 +178,7 @@ export default class Displayer {
       input.type = inputType;
       input.placeHolder = placeholderText;
       input.name = inputName;
+      input.classList.add('form__input')
     const label = document.createElement('label');
       label.for = inputName;
       label.innerText = labelText;
