@@ -165,7 +165,7 @@ export default class Displayer {
       cancelBtn.innerText = 'Cancel';
       cancelBtn.onclick = (event) => {
         event.preventDefault();
-        const formContainer = event.path[2];
+        const formContainer = document.getElementsByClassName('form__container')[0];
         formContainer.remove();
       }
     form.appendChild(cancelBtn);
