@@ -211,6 +211,16 @@ export default class Displayer {
 
     form.appendChild(submitButton);
 
+    const cancelBtn = document.createElement('button');
+      cancelBtn.classList.add('form__cancel-btn');
+      cancelBtn.innerText = 'Cancel';
+      cancelBtn.onclick = (event) => {
+        event.preventDefault();
+        const formContainer = document.getElementsByClassName('form__container')[0];
+        formContainer.remove();
+      }
+    form.appendChild(cancelBtn);
+
     this.rootNode.appendChild(newProjectFormContainer);
   };
 
