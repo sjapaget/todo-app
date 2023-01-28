@@ -1,51 +1,47 @@
-import Project from './project.js';
-import Task from './task.js'
+import Project from './project';
+import Task from './task';
 
 export default class Displayer {
-
   constructor(rootNode, projects) {
     this.rootNode = rootNode;
     this.projects = projects;
-    this.currentProject = projects[0];
+    [this.currentProject] = projects;
   }
 
   renderUI() {
-
     this.#renderControls(this.rootNode);
 
     const taskContainer = document.createElement('main');
-      taskContainer.classList.add('main__task-container');
+    taskContainer.classList.add('main__task-container');
     this.#renderCurrentProject(this.currentProject, taskContainer);
     this.rootNode.appendChild(taskContainer);
 
     const projectsContainer = document.createElement('aside');
-      projectsContainer.classList.add('main__projects-list');
-      this.#renderProjectsList(projectsContainer);
+    projectsContainer.classList.add('main__projects-list');
+    this.#renderProjectsList(projectsContainer);
     this.rootNode.appendChild(projectsContainer);
-  };
+  }
 
   #renderControls(DOMnode) {
-
     const buttonsContainer = document.createElement('div');
-      buttonsContainer.classList.add('main__buttons-container');
+    buttonsContainer.classList.add('main__buttons-container');
 
     const addTaskButton = document.createElement('button');
-      addTaskButton.classList.add('controls__button');
-      addTaskButton.innerText = "Add Task";
-      addTaskButton.onclick = this.#renderNewTaskForm.bind(this);
+    addTaskButton.classList.add('controls__button');
+    addTaskButton.innerText = 'Add Task';
+    addTaskButton.onclick = this.#renderNewTaskForm.bind(this);
     buttonsContainer.appendChild(addTaskButton);
 
     const addProjectButton = document.createElement('button');
-      addProjectButton.classList.add('controls__button');
-      addProjectButton.innerText = "New Project";
-      addProjectButton.onclick = this.#renderNewProjectForm.bind(this);
+    addProjectButton.classList.add('controls__button');
+    addProjectButton.innerText = 'New Project';
+    addProjectButton.onclick = this.#renderNewProjectForm.bind(this);
     buttonsContainer.appendChild(addProjectButton);
 
     DOMnode.appendChild(buttonsContainer);
-  };
+  }
 
   #renderCurrentProject(currentProject, DOMnode) {
-
     DOMnode.replaceChildren();
 
     const projectName = document.createElement('h1');
@@ -56,208 +52,203 @@ export default class Displayer {
   }
 
   #renderProjectsList(DOMnode) {
-
     DOMnode.replaceChildren();
 
     const listContainer = document.createElement('ul');
 
     const sectionTitle = document.createElement('h1');
-      sectionTitle.innerText = 'Projects:'
+    sectionTitle.innerText = 'Projects:';
     listContainer.appendChild(sectionTitle);
 
-    const projectsList = this.projects.map(project => project.name);
-      projectsList.map(projectName => {
-        const listItem = document.createElement('li');
-        listItem.innerText = projectName;
-        listContainer.appendChild(listItem);
-      });
+    const projectsList = this.projects.map((project) => project.name);
+    projectsList.forEach((projectName) => {
+      const listItem = document.createElement('li');
+      listItem.innerText = projectName;
+      listContainer.appendChild(listItem);
+    });
 
     DOMnode.appendChild(listContainer);
-  };
+  }
 
   #renderTasks(tasksArray, DOMnode = this.rootNode) {
-
     const taskList = document.createElement('ul');
-      taskList.classList.add('main__task-list')
+    taskList.classList.add('main__task-list');
 
-    tasksArray.forEach(task => {
+    tasksArray.forEach((task) => {
       const listItem = document.createElement('li');
       listItem.innerText = task.title;
       taskList.appendChild(listItem);
     });
 
     DOMnode.appendChild(taskList);
-  };
+  }
 
   #renderNewTaskForm() {
-
     const newTaskFormContainer = document.createElement('div');
-      newTaskFormContainer.classList.add('form__container')
+    newTaskFormContainer.classList.add('form__container');
 
     const form = document.createElement('form');
 
     const title = document.createElement('h2');
-      title.innerText = 'New Task';
+    title.innerText = 'New Task';
 
     newTaskFormContainer.appendChild(title);
     newTaskFormContainer.appendChild(form);
 
-    const [taskTitleGroup, taskTitleInput] = this.#generateFormInput({
-      inputType: "text",
-      placeholderText: "Feed the cat...",
-      inputName: "task-name",
-      labelText: 'Task Name'
+    const [taskTitleGroup, taskTitleInput] = Displayer.#generateFormInput({
+      inputType: 'text',
+      placeholderText: 'Feed the cat...',
+      inputName: 'task-name',
+      labelText: 'Task Name',
     });
 
     form.appendChild(taskTitleGroup);
 
-    const [taskDescriptionGroup, taskDescriptionInput] = this.#generateFormInput({
-      inputType: "text",
-      placeholderText: "More details here.",
-      inputName: "task-description",
-      labelText: 'Description'
+    const [taskDescriptionGroup, taskDescriptionInput] = Displayer.#generateFormInput({
+      inputType: 'text',
+      placeholderText: 'More details here.',
+      inputName: 'task-description',
+      labelText: 'Description',
     });
     form.appendChild(taskDescriptionGroup);
 
-    const [taskDueDateGroup, taskDueDateInput] = this.#generateFormInput({
-      inputType: "date",
-      placeholderText: "dd/mm/yyyy",
-      inputName: "task-dueDate",
-      labelText: 'Due Date'
+    const [taskDueDateGroup, taskDueDateInput] = Displayer.#generateFormInput({
+      inputType: 'date',
+      placeholderText: 'dd/mm/yyyy',
+      inputName: 'task-dueDate',
+      labelText: 'Due Date',
     });
     form.appendChild(taskDueDateGroup);
 
-    const [taskPriorityGroup, taskPriorityInput] = this.#generateFormInput({
+    const [taskPriorityGroup, taskPriorityInput] = Displayer.#generateFormInput({
       inputType: 'checkbox',
-      placeholderText: "Priority task?",
-      inputName: "task-priority",
-      labelText: "Priority task?"
+      placeholderText: 'Priority task?',
+      inputName: 'task-priority',
+      labelText: 'Priority task?',
     });
     form.appendChild(taskPriorityGroup);
 
     const submitButton = document.createElement('button');
-      submitButton.innerText = "Create Task";
+    submitButton.innerText = 'Create Task';
 
-      submitButton.onclick = (event) => {
-        event.preventDefault();
-        
-        const dueDate = new Date(taskDueDateInput.value);
+    submitButton.onclick = (event) => {
+      event.preventDefault();
 
-        this.currentProject.addTask(new Task({
-          title: taskTitleInput.value,
-          description: taskDescriptionInput.value,
-          dueDate: dueDate,
-          priority: taskPriorityInput.value
-        }));
+      const dueDate = new Date(taskDueDateInput.value);
 
-        const taskContainer = document.getElementsByClassName('main__task-container')[0];
+      this.currentProject.addTask(new Task({
+        title: taskTitleInput.value,
+        description: taskDescriptionInput.value,
+        dueDate,
+        priority: taskPriorityInput.value,
+      }));
 
-        this.#renderCurrentProject(this.currentProject, taskContainer);
+      const taskContainer = document.getElementsByClassName('main__task-container')[0];
 
-        const formContainer = event.composedPath()[2];
-        formContainer.remove();
-      };
+      this.#renderCurrentProject(this.currentProject, taskContainer);
+
+      const formContainer = event.composedPath()[2];
+      formContainer.remove();
+    };
 
     form.appendChild(submitButton);
 
-    const cancelBtn = this.#generateFormCancelBtn();
+    const cancelBtn = Displayer.#generateFormCancelBtn();
     form.appendChild(cancelBtn);
 
     newTaskFormContainer.appendChild(title);
     newTaskFormContainer.appendChild(form);
 
     this.rootNode.appendChild(newTaskFormContainer);
-  };
+  }
 
   #renderNewProjectForm() {
-
-    const newProjectFormContainer = this.#generateForm('New Project');
+    const newProjectFormContainer = Displayer.#generateForm('New Project');
     const form = newProjectFormContainer.firstChild;
 
-    const [projectTitleGroup, projectTitleInput] = this.#generateFormInput({
-      inputType: "text",
-      placeholderText: "Project title",
-      inputName: "project-name",
-      labelText: "Title"
+    const [projectTitleGroup, projectTitleInput] = Displayer.#generateFormInput({
+      inputType: 'text',
+      placeholderText: 'Project title',
+      inputName: 'project-name',
+      labelText: 'Title',
     });
     form.appendChild(projectTitleGroup);
 
     const submitButton = document.createElement('button');
-      submitButton.innerText = "Create Project";
+    submitButton.innerText = 'Create Project';
 
-      submitButton.onclick = (event) => {
-        event.preventDefault();
+    submitButton.onclick = (event) => {
+      event.preventDefault();
 
-        const newProject = new Project({
-          name: projectTitleInput.value
-        });
+      const newProject = new Project({
+        name: projectTitleInput.value,
+      });
 
-        this.projects.push(newProject);
+      this.projects.push(newProject);
 
-        const projectListContainer = document.querySelector('.main__projects-list');
+      const projectListContainer = document.querySelector('.main__projects-list');
 
-        this.#renderProjectsList(projectListContainer);
+      this.#renderProjectsList(projectListContainer);
 
-        const formContainer = document.querySelector('.form__container');
-        formContainer.remove();
-      };
+      const formContainer = document.querySelector('.form__container');
+      formContainer.remove();
+    };
 
     form.appendChild(submitButton);
 
-    const cancelBtn = this.#generateFormCancelBtn();
+    const cancelBtn = Displayer.#generateFormCancelBtn();
     form.appendChild(cancelBtn);
 
     this.rootNode.appendChild(newProjectFormContainer);
-  };
+  }
 
-  #generateForm(formTitle) {
+  static #generateForm(formTitle) {
     const formContainer = document.createElement('div');
-      formContainer.classList.add('form__container');
+    formContainer.classList.add('form__container');
 
     const form = document.createElement('form');
 
     const title = document.createElement('h2');
-      form.innerText = formTitle;
+    form.innerText = formTitle;
 
-      formContainer.appendChild(form);
-      formContainer.appendChild(title);
+    formContainer.appendChild(form);
+    formContainer.appendChild(title);
 
     return formContainer;
   }
 
-  #generateFormInput(properties) {
+  static #generateFormInput(properties) {
     const {
       inputType,
       placeholderText,
       inputName,
       labelText,
-
     } = properties;
 
     const input = document.createElement('input');
-      input.type = inputType;
-      input.placeholder = placeholderText;
-      input.name = inputName;
-      input.classList.add('form__input')
+    input.type = inputType;
+    input.placeholder = placeholderText;
+    input.name = inputName;
+    input.classList.add('form__input');
     const label = document.createElement('label');
-      label.for = inputName;
-      label.innerText = labelText;
+    label.for = inputName;
+    label.innerText = labelText;
     const group = document.createElement('div');
-      group.classList.add("form__input-group")
-      group.appendChild(label);
-      group.appendChild(input);
-    return [group, input]
-  };
+    group.classList.add('form__input-group');
+    group.appendChild(label);
+    group.appendChild(input);
+    return [group, input];
+  }
 
-  #generateFormCancelBtn() {
+  static #generateFormCancelBtn() {
     const cancelBtn = document.createElement('button');
-      cancelBtn.classList.add('form__cancel-btn');
-      cancelBtn.innerText = 'Cancel';
-      cancelBtn.onclick = (event) => {
-        event.preventDefault();
-        const formContainer = event.composedPath()[2];
-        formContainer.remove();
-      }
-      return cancelBtn;
+    cancelBtn.classList.add('form__cancel-btn');
+    cancelBtn.innerText = 'Cancel';
+    cancelBtn.onclick = (event) => {
+      event.preventDefault();
+      const formContainer = event.composedPath()[2];
+      formContainer.remove();
+    };
+    return cancelBtn;
   }
 }
