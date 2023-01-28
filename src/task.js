@@ -1,9 +1,11 @@
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 export default class Task {
-  constructor({ title, description, dueDate, priority, completed }) {
-    this.title = title || "Title";
-    this.description = description || "Description";
+  constructor({
+    title, description, dueDate, priority, completed,
+  }) {
+    this.title = title || 'Title';
+    this.description = description || 'Description';
     this.dueDate = dueDate || new Date();
     this.priority = priority || false;
     this.completed = completed || false;
@@ -16,4 +18,4 @@ export default class Task {
   set done(val) {
     this.completed = val;
   }
-};
+}
