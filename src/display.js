@@ -20,8 +20,8 @@ export default class Displayer {
 
     const projectsContainer = document.createElement('aside');
       projectsContainer.classList.add('main__projects-list');
+      this.#renderProjectsList(projectsContainer);
     this.rootNode.appendChild(projectsContainer);
-    this.#renderProjectsList(projectsContainer);
   };
 
   #renderControls(DOMnode) {
@@ -139,8 +139,8 @@ export default class Displayer {
       submitButton.innerText = "Create Task";
 
       submitButton.onclick = (event) => {
-
         event.preventDefault();
+        
         const dueDate = new Date(taskDueDateInput.value);
 
         this.currentProject.addTask(new Task({
@@ -154,7 +154,7 @@ export default class Displayer {
 
         this.#renderCurrentProject(this.currentProject, taskContainer);
 
-        const formContainer = event.path[2];
+        const formContainer = event.composedPath()[2];
         formContainer.remove();
       };
 
@@ -255,7 +255,7 @@ export default class Displayer {
       cancelBtn.innerText = 'Cancel';
       cancelBtn.onclick = (event) => {
         event.preventDefault();
-        const formContainer = document.getElementsByClassName('form__container')[0];
+        const formContainer = event.composedPath()[2];
         formContainer.remove();
       }
       return cancelBtn;
