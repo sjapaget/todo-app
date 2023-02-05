@@ -5,7 +5,7 @@ export default class Storer {
     return todosObj;
   }
 
-  static save(allProjects) {
+  static saveAllProjects(allProjects) {
     localStorage.setItem('todos', allProjects);
   }
 }

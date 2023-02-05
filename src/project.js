@@ -15,7 +15,7 @@ export default class Project {
     existingProjects.push(this);
 
     const existingProjectsStringified = JSON.stringify(existingProjects);
-    Storer.save(existingProjectsStringified);
+    Storer.saveAllProjects(existingProjectsStringified);
   }
 
   get taskList() {
