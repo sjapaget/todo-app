@@ -7,21 +7,15 @@ export default class Project {
     this.id = v1();
     this.name = name || 'Unknown';
     this.tasks = tasks || [];
-    this.#saveProject();
   }
 
-  #saveProject() {
-    const projectData = {
-      id: this.id,
-      name: this.name,
-      tasks: this.tasks,
-    };
-
-    const existingProjects = Storer.retrieveAll() || [];
-    existingProjects.push(projectData);
+  saveProject() {
+    const existingProjectData = Storer.retrieveAll() || [];
+    const existingProjects = existingProjectData.map((projectData) => new Project(projectData));
+    existingProjects.push(this);
 
     const existingProjectsStringified = JSON.stringify(existingProjects);
-    localStorage.setItem('todos', existingProjectsStringified);
+    Storer.save(existingProjectsStringified);
   }
 
   get taskList() {
@@ -31,6 +25,6 @@ export default class Project {
   addTask(task) {
     // add a check to verify that the parameter passed is an instance of Task class
     this.tasks.push(task);
-    this.#saveProject();
+    this.saveProject();
   }
 }

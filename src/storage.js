@@ -4,4 +4,8 @@ export default class Storer {
     const todosObj = JSON.parse(todosString);
     return todosObj;
   }
+
+  static save(allProjects) {
+    localStorage.setItem('todos', allProjects);
+  }
 }

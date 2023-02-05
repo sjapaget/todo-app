@@ -8,12 +8,12 @@ export default class Displayer {
     [this.currentProject] = projects;
   }
 
-  renderUI() {
+  renderUI(projectToDisplay = this.currentProject) {
     this.#renderControls(this.rootNode);
 
     const taskContainer = document.createElement('main');
     taskContainer.classList.add('main__task-container');
-    this.#renderCurrentProject(this.currentProject, taskContainer);
+    this.#renderCurrentProject(projectToDisplay, taskContainer);
     this.rootNode.appendChild(taskContainer);
 
     const projectsContainer = document.createElement('aside');
@@ -64,6 +64,9 @@ export default class Displayer {
     projectsList.forEach((projectName) => {
       const listItem = document.createElement('li');
       listItem.innerText = projectName;
+      listItem.addEventListener('click', () => {
+        // Switch tasks list to render using the tasks from this project
+      });
       listContainer.appendChild(listItem);
     });
 
@@ -73,7 +76,6 @@ export default class Displayer {
   #renderTasks(tasksArray, DOMnode = this.rootNode) {
     const taskList = document.createElement('ul');
     taskList.classList.add('main__task-list');
-
     tasksArray.forEach((task) => {
       const listItem = document.createElement('li');
       listItem.innerText = task.title;
@@ -133,7 +135,6 @@ export default class Displayer {
 
     submitButton.onclick = (event) => {
       event.preventDefault();
-
       const dueDate = new Date(taskDueDateInput.value);
 
       this.currentProject.addTask(new Task({
@@ -183,7 +184,7 @@ export default class Displayer {
       const newProject = new Project({
         name: projectTitleInput.value,
       });
-
+      newProject.saveProject();
       this.projects.push(newProject);
 
       const projectListContainer = document.querySelector('.main__projects-list');
