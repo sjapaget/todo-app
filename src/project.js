@@ -16,12 +16,14 @@ export default class Project {
 
     const projectAlreadyExists = existingProjects.find((project) => project.id === this.id);
 
+    let updatedProject;
     if (projectAlreadyExists) {
-      existingProjects.forEach((project) => {
-        if (project.id === this.id) {
-          project.tasks = this.tasks;
-        }
-      })
+      updatedProject = {
+        ...projectAlreadyExists,
+        tasks: this.tasks,
+      };
+      const projectIndex = existingProjects.findIndex((project) => project.id === this.id);
+      existingProjects[projectIndex] = updatedProject;
     } else {
       existingProjects.push(this);
     }
