@@ -3,8 +3,9 @@ import { v1 } from 'uuid';
 import Storer from './storage';
 
 export default class Project {
-  constructor({ name, tasks }) {
-    this.id = v1();
+  constructor({ name, tasks, id = v1() }) {
+    // TODO - check this, looks like it is generating a new id every time a project is deserialised
+    this.id = id;
     this.name = name || 'Unknown';
     this.tasks = tasks || [];
   }
@@ -12,7 +13,18 @@ export default class Project {
   saveProject() {
     const existingProjectData = Storer.retrieveAll() || [];
     const existingProjects = existingProjectData.map((projectData) => new Project(projectData));
-    existingProjects.push(this);
+
+    const projectAlreadyExists = existingProjects.find((project) => project.id === this.id);
+
+    if (projectAlreadyExists) {
+      existingProjects.forEach((project) => {
+        if (project.id === this.id) {
+          project.tasks = this.tasks;
+        }
+      })
+    } else {
+      existingProjects.push(this);
+    }
 
     const existingProjectsStringified = JSON.stringify(existingProjects);
     Storer.saveAllProjects(existingProjectsStringified);
